@@ -20,10 +20,14 @@ export interface CartItem extends Product {
   selectedColor: string;
 }
 
+export type UserRole = 'customer' | 'admin';
+
 export interface User {
   id: string;
   name: string;
   email: string;
+  role: UserRole;
+  token?: string; // Simulated JWT
 }
 
 export interface FilterState {

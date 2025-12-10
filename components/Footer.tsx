@@ -1,13 +1,24 @@
 
-
 import React from 'react';
-import { Instagram, Twitter, Facebook, Youtube, Lock } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Youtube, Lock, Unlock } from 'lucide-react';
+import { User } from '../types';
 
 interface FooterProps {
   onOpenAdmin: () => void;
+  currentUser: User | null;
 }
 
-const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
+const Footer: React.FC<FooterProps> = ({ onOpenAdmin, currentUser }) => {
+  const handleAdminClick = () => {
+    if (currentUser && currentUser.role === 'admin') {
+      onOpenAdmin();
+    } else {
+      alert("Access Denied: You must be logged in as an Administrator to access the dashboard.");
+    }
+  };
+
+  const isAdmin = currentUser?.role === 'admin';
+
   return (
     <footer className="bg-black text-white pt-20 pb-10 border-t border-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,8 +70,12 @@ const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
           <p>&copy; {new Date().getFullYear()} StrideZero Inc. All rights reserved.</p>
           <div className="flex items-center gap-4 mt-2 md:mt-0">
              <p className="uppercase tracking-wider">Designed for Performance</p>
-             <button onClick={onOpenAdmin} className="text-gray-800 hover:text-gray-600 transition-colors" title="Admin Access">
-               <Lock size={12} />
+             <button 
+              onClick={handleAdminClick} 
+              className={`transition-colors ${isAdmin ? 'text-green-500 hover:text-green-400' : 'text-gray-800 hover:text-gray-600'}`} 
+              title={isAdmin ? "Access Admin Dashboard" : "Admin Access (Locked)"}
+             >
+               {isAdmin ? <Unlock size={12} /> : <Lock size={12} />}
              </button>
           </div>
         </div>
